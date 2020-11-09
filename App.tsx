@@ -30,8 +30,8 @@ export default function App() {
 const styles = StyleSheet.create({
     container: {
         flex: 3,
-        backgroundColor: 'darkgrey',
-        /*alignItems: 'center',*/
+        /*backgroundColor: 'darkgrey',*/
+        alignItems: 'center',
         justifyContent: 'space-between',
     }
 });

@@ -12,10 +12,10 @@ export const API = {
 
     getDefaultWeatherList(city: string) {
 
-        return instance.get(`weather?q=${city}&units=metric&appid=${apiId}`)
-            .then((res: any):dataType => {
-
-                return res.data
+        return instance.get(`weather?q=${city}&units=metric&appid=${apiId}&lang=ru`)
+            .then((res: any) => {
+                console.log(res)
+                return res
             })
     },
     getForecastWeatherList(coord:coordType, part: string) {

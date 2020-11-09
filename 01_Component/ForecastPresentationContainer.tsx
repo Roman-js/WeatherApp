@@ -16,16 +16,6 @@ export const ForecastPresentationContainer = () => {
 
     const data: initialStateType = useSelector((state: AppStateType) => state.mainPage);
 
-    type stateType = {
-        date: string,
-        days: number,
-        forecastArray: dataArrayOfDailyForecastsType
-    }
-    const [state, setState] = useState<stateType>({
-        date: '',
-        days: 0,
-        forecastArray: []
-    });
 
     let daysArray = data.days === 3? [...data.forecastItem].splice(0,3) : data.forecastItem;
 

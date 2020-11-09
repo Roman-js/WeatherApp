@@ -36,7 +36,8 @@ const initialState: initialStateType = {
         description: 'light rain',
         pressure: 0,
         temp_max: 0,
-        temp_min: 0
+        temp_min: 0,
+        weatherIcon: ''
     },
     forecastItem: [],
     coord: {
@@ -55,11 +56,13 @@ const MainReducer = (state: initialStateType = initialState, action: WeatherActi
     switch (action.type) {
 
         case GET_DEFAULT_WEATHER:
+
             return {
-                ...state, main: action.weatherList, city: action.city, coord: {...action.coord}
+                ...state, main: action.weatherList, city: action.city, coord: {...action.coord}, date: action.date
             };
 
         case GET_CHOSE_CITY_WEATHER:
+            debugger
             return {
                 ...state, main: action.weatherList, city: action.city, coord: action.coord
             };
@@ -93,17 +96,19 @@ export default MainReducer
 
 //actionCreators
 
-const getWeatherSuccess = (weatherList: mainType, coord: coordType, city: string): WeatherActionType => ({
+const getWeatherSuccess = (weatherList: mainType, coord: coordType, city: string, date: string): WeatherActionType => ({
     type: GET_DEFAULT_WEATHER,
     weatherList,
     coord,
-    city
+    city,
+    date
 });
-const getChoseCityWeatherSuccess = (weatherList: mainType, coord: coordType, city: string): WeatherActionType => ({
+const getChoseCityWeatherSuccess = (weatherList: mainType, coord: coordType, city: string, date: string): WeatherActionType => ({
     type: GET_CHOSE_CITY_WEATHER,
     weatherList,
     coord,
-    city
+    city,
+    date
 });
 const getWeatherForecastSuccess = (weatherList: mainType): WeatherActionType => ({
     type: GET_WEATHER_FORECAST,
@@ -136,21 +141,25 @@ export const getDefaultWeather = (city: string): ThunkType =>
 
         try {
             let data = await API.getDefaultWeatherList(loc);
+
             let res: mainType = {
-                temp: data.main.temp,
-                wind_speed: data.wind.speed,
-                humidity: data.main.humidity,
-                cloudy: data.clouds.all,
-                feels_like: data.main.feels_like,
-                sunset: data.sys.sunset,
-                sunrise: data.sys.sunrise,
-                description: data.weather[0].description,
-                pressure: data.main.pressure,
-                temp_max: data.main.temp_max,
-                temp_min: data.main.temp_min
+                temp: data.data.main.temp,
+                wind_speed: data.data.wind.speed,
+                humidity: data.data.main.humidity,
+                cloudy: data.data.clouds.all,
+                feels_like: data.data.main.feels_like,
+                sunset: data.data.sys.sunset,
+                sunrise: data.data.sys.sunrise,
+                description: data.data.weather[0].description,
+                pressure: data.data.main.pressure,
+                temp_max: data.data.main.temp_max,
+                temp_min: data.data.main.temp_min,
+                weatherIcon: data.data.weather[0].icon
             };
-            dispatch(getWeatherSuccess(res, data.coord, data.name))
+            dispatch(getWeatherSuccess(res, data.data.coord, data.data.name, data.headers.date))
+            dispatch(responseResult(false));
         } catch (e) {
+            debugger
             dispatch(responseResult(true));
         }
     };
@@ -159,26 +168,26 @@ export const getChoseCityWeather = (city: string): ThunkType =>
     async (dispatch, getState) => {
         try {
             let data = await API.getDefaultWeatherList(city);
-
             let storage = {city: city, coordinates: data.coord};
             await AsyncStorage.setItem('defaultValue', JSON.stringify(storage));
             //console.log(JSON.parse.AsyncStorage.getItem('defaultValue'));
 
 
             let res: mainType = {
-                temp: data.main.temp,
-                wind_speed: data.wind.speed,
-                humidity: data.main.humidity,
-                cloudy: data.clouds.all,
-                feels_like: data.main.feels_like,
-                sunset: data.sys.sunset,
-                sunrise: data.sys.sunrise,
-                description: data.weather[0].description,
-                pressure: data.main.pressure,
-                temp_max: data.main.temp_max,
-                temp_min: data.main.temp_min
+                temp: data.data.main.temp,
+                wind_speed: data.data.wind.speed,
+                humidity: data.data.main.humidity,
+                cloudy: data.data.clouds.all,
+                feels_like: data.data.main.feels_like,
+                sunset: data.data.sys.sunset,
+                sunrise: data.data.sys.sunrise,
+                description: data.data.weather[0].description,
+                pressure: data.data.main.pressure,
+                temp_max: data.data.main.temp_max,
+                temp_min: data.data.main.temp_min,
+                weatherIcon: data.data.weather[0].icon
             };
-            dispatch(getChoseCityWeatherSuccess(res, data.coord, data.name));
+            dispatch(getChoseCityWeatherSuccess(res, data.coord, data.name, data.headers.date));
             dispatch(responseResult(false));
         } catch (e) {
             dispatch(responseResult(true));
@@ -201,7 +210,8 @@ export const getWeatherForecast = (coordinates: coordType): ThunkType =>
                 description: data.data.daily[0].weather[0].description,
                 pressure: data.data.daily[0].pressure,
                 temp_max: data.data.daily[0].temp.max,
-                temp_min: data.data.daily[0].temp.min
+                temp_min: data.data.daily[0].temp.min,
+                weatherIcon: data.data.daily[0].weather[0].icon
             };
             dispatch(getWeatherForecastSuccess(res))
         } catch (e) {

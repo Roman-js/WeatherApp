@@ -32,6 +32,8 @@ export const Header = () => {
        state.searchingCity
            ? dispatch(getChoseCityWeather(state.searchingCity))
            : dispatch(responseResult(true));
+
+       /*!responseResultData && setState({...state, onSearch: responseResultData})*/
     };
     return (
         <View style={styles.headerBox}>
@@ -56,7 +58,7 @@ export const Header = () => {
 
                     </View>
                     : <View style={styles.iconsBox}>
-                        <Text style={styles.textStyle}>{cityTitle}</Text>
+                        <Text style={styles.textStyle}>{cityTitle || state.searchingCity}</Text>
                         <SearchIcon onClick={() => {
                             setState({...state, onSearch: true})
                         }}/>
@@ -74,7 +76,7 @@ const styles = StyleSheet.create({
     headerBox: {
         width: '100%',
         height: '55px',
-        backgroundColor: 'darkblue',
+        backgroundColor: '#3d4a5d',
         zIndex: 100,
         color: 'white',
         alignItems: 'flex-end',

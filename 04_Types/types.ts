@@ -17,6 +17,7 @@ export type mainType = {
     sunset: number,
     sunrise: number,
     description: string,
+    weatherIcon: string
 }
 export type forecastItemType = {
     date: string
@@ -115,12 +116,14 @@ type GetDefaultWeatherType = {
     weatherList: mainType
     coord: coordType
     city: string
+    date: string
 };
 type GetChoseCityWeatherType = {
     type: typeof GET_CHOSE_CITY_WEATHER
     weatherList: mainType
     coord: coordType
     city: string
+    date: string
 };
 type GetWeatherForecastSuccessType = {
     type: typeof GET_WEATHER_FORECAST
