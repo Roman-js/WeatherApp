@@ -3,13 +3,13 @@ import {Image, ImageBackground, ScrollView, StyleSheet, Text, View} from 'react-
 import {getDefaultWeather, initialStateType} from "../03_reducer/MainReducer";
 import {Provider, useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../03_reducer/store";
-// @ts-ignore
 import humidityIcon from '../05_Common/images/weather_icons/humidity.jpg';
 import pressureIcon from '../05_Common/images/weather_icons/press_first.png';
 import windIcon from '../05_Common/images/weather_icons/wind_main2.png';
 import backgroundImg from '../05_Common/images/back_two.jpg';
 import {Header} from "./Header";
 import {WeatherForecast} from "./WeatherForecast";
+import {convert} from "./Tools/ConvertTimeStampToDate";
 
 
 type mainType = {
@@ -26,17 +26,17 @@ type mainType = {
     description: string
 }
 
-export const Weather = (props: any) => {
+export const WeatherTomorrow = (props: any) => {
 
-
+    /*useEffect(() => {
+        getWeather('')
+    }, [props.navigation.navigate('Main')]);*/
 
     const dispatch = useDispatch();
     // @ts-ignore
-    const defaultWeather = useSelector((state: AppStateType) => state.mainPage);
+    const tomorrowWeather = useSelector((state: AppStateType) => state.mainPage.forecastItem[1]);
+    const date = useSelector((state: AppStateType) => state.mainPage.date);
 
-    useEffect(() => {
-        getWeather('')
-    }, []); //defaultWeather.main.sunrise  props.navigation.navigate('Main')
 
     function getWeather(city: string) {
         dispatch(getDefaultWeather(city))
@@ -52,15 +52,16 @@ export const Weather = (props: any) => {
 
             <View style={styles.contentBox}>
 
-                {!defaultWeather ? preload :
+                {!tomorrowWeather ? preload :
                     <View style={styles.weatherBox}>
+                        {console.log(tomorrowWeather)}
                         <ImageBackground source={backgroundImg} style={styles.backgroundImage}>
                             <View style={styles.mainBox}>
 
 
                                 <View style={{width: '40%', alignItems: 'center', height: '45vh'}}>
                                     <img
-                                        src={`http://openweathermap.org/img/wn/${defaultWeather.main.weatherIcon}@2x.png`}
+                                        src={`http://openweathermap.org/img/wn/${tomorrowWeather.weather[0].icon}@2x.png`}
                                         style={{width: '150px', height: '150px', paddingTop: '50px'}}/>
                                     <Text style={{
                                         fontSize: '15px',
@@ -68,7 +69,7 @@ export const Weather = (props: any) => {
                                         paddingTop: '10%',
                                         fontWeight: 600
                                     }}>облачность </Text>
-                                    <Text style={{fontSize: '30px'}}>{defaultWeather.main.cloudy}%</Text>
+                                    <Text style={{fontSize: '30px'}}>{tomorrowWeather.clouds}%</Text>
                                 </View>
 
                                 <View style={{width: '60%', paddingTop: '55px', height: '45vh'}}>
@@ -77,12 +78,12 @@ export const Weather = (props: any) => {
                                             fontSize: '50px',
                                             textAlign: 'center',
                                             color: 'white'
-                                        }}>{defaultWeather.main.temp} °C</Text>
+                                        }}>{tomorrowWeather.temp.day} °C</Text>
                                     <Text style={{
                                         textAlign: 'center', fontSize: '15px', color: 'white'
-                                    }}>{defaultWeather.main.description}</Text>
+                                    }}>{tomorrowWeather.weather[0].description}</Text>
                                     <Text style={{textAlign: 'center', fontSize: '13px', color: 'white'}}>
-                                        {defaultWeather.main.temp_min}°/{defaultWeather.main.temp_max}°
+                                        {tomorrowWeather.temp.min}°/{tomorrowWeather.temp.max}°
                                     </Text>
 
                                     <Text style={{
@@ -94,7 +95,7 @@ export const Weather = (props: any) => {
                                     }}>ощущается как</Text>
                                     <Text style={{
                                         fontSize: '30px', textAlign: 'center', color: 'brown'
-                                    }}>{defaultWeather.main.feels_like} °C</Text>
+                                    }}>{tomorrowWeather.feels_like.day} °C</Text>
 
                                 </View>
 
@@ -105,25 +106,28 @@ export const Weather = (props: any) => {
                             fontSize: '18px',
                             backgroundColor: '#3d4a5d',
                             color: 'white'
-                        }}>{defaultWeather.date}</Text>
+                        }}>
+                            {convert(tomorrowWeather.dt)[0]+' '+convert(tomorrowWeather.dt)[1] +' '+
+                            convert(tomorrowWeather.dt)[2]+' '+convert(tomorrowWeather.dt)[3]}
+                        </Text>
                         <View style={styles.iconBox}>
 
                             <View style={styles.iconUnit}>
-                                <Text style={{textAlign: 'center'}}>влажность</Text>
+                                <Text style={{textAlign: 'center'}}>Влажность</Text>
                                 <img src={humidityIcon} style={{width: '90px', height: '90px'}}/>
-                                <Text style={{textAlign: 'center'}}>{defaultWeather.main.humidity}%</Text>
+                                <Text style={{textAlign: 'center'}}>{tomorrowWeather.humidity}%</Text>
                             </View>
 
                             <View style={styles.iconUnit}>
 
-                                <Text style={{textAlign: 'center'}}>скорость ветра</Text>
+                                <Text style={{textAlign: 'center'}}>Скорость ветра</Text>
                                 <img src={windIcon} style={{width: '90px', height: '90px'}}/>
-                                <Text style={{textAlign: 'center'}}>{defaultWeather.main.wind_speed} м/c</Text>
+                                <Text style={{textAlign: 'center'}}>{tomorrowWeather.wind_speed} м/c</Text>
                             </View>
                             <View style={styles.iconUnit}>
-                                <Text style={{textAlign: 'center'}}>давление</Text>
+                                <Text style={{textAlign: 'center'}}>Давление</Text>
                                 <img src={pressureIcon} style={{width: '90px', height: '90px'}}/>
-                                <Text style={{textAlign: 'center'}}>{defaultWeather.main.pressure}мм</Text>
+                                <Text style={{textAlign: 'center'}}>{tomorrowWeather.pressure}мм</Text>
 
                             </View>
 

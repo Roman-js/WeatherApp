@@ -21,11 +21,11 @@ export const ForecastPresentationContainer = () => {
 
     return (
 
-        <View style={styles.forecastBox}>
+        /*<View style={styles.forecastBox}>*/
 
             <ForecastPresentation forecastDays={daysArray} date={data.date}/>
 
-        </View>
+        /*</View>*/
 
     )
 };

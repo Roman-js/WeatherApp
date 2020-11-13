@@ -127,7 +127,7 @@ type GetChoseCityWeatherType = {
 };
 type GetWeatherForecastSuccessType = {
     type: typeof GET_WEATHER_FORECAST
-    weatherList: mainType
+    weatherList: dataArrayOfDailyForecastsType
 };
 type GetWeatherForecastForThreeDaysType = {
     type: typeof GET_WEATHER_FORECAST_FOR_COUPLE_DAYS

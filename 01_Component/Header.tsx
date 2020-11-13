@@ -3,17 +3,19 @@ import LocationSearchingIcon from "@material-ui/icons/LocationSearching";
 import React, {useState} from "react";
 import {StyleSheet, Text, View} from "react-native";
 import {IconButton, TextField} from "@material-ui/core";
-import {getChoseCityWeather, responseResult} from "../03_reducer/MainReducer";
+import {getChoseCityWeather, getDefaultWeather, responseResult} from "../03_reducer/MainReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../03_reducer/store";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
 
 
 export const Header = () => {
 
     const responseResultData = useSelector((state: AppStateType) => state.mainPage.responseResult);
     const cityTitle = useSelector((state: AppStateType) => state.mainPage.city);
-
     const dispatch = useDispatch();
+    /*const route = useRoute();*/
     const [state, setState] = useState({
         onSearch: false,
         searchError: responseResultData,
@@ -29,14 +31,25 @@ export const Header = () => {
     };
 
     const getRequiredCityWeather = () => {
-       state.searchingCity
-           ? dispatch(getChoseCityWeather(state.searchingCity))
-           : dispatch(responseResult(true));
-
-       /*!responseResultData && setState({...state, onSearch: responseResultData})*/
+        setTimeout(()=> !responseResultData && setState({...state, onSearch: false}), 25000);
+        state.searchingCity
+            ? dispatch(getChoseCityWeather(state.searchingCity))
+            : dispatch(responseResult(true));
     };
+    const onCityField = () => {
+        setTimeout(()=> !responseResultData && setState({...state, onSearch: false}), 35000);
+        setState({...state, onSearch: true})
+
+    };
+
+
     return (
         <View style={styles.headerBox}>
+            {/*<View style={{marginLeft: '10px'}}>
+                <IconButton style={{color: 'white'}}>
+                    <ArrowBackIcon/>
+                </IconButton>
+            </View>*/}
 
             <header>
                 {state.onSearch
@@ -52,22 +65,21 @@ export const Header = () => {
                         />
                         <IconButton>
                             <SearchIcon style={{color: 'white'}}
-                                        onClick={ getRequiredCityWeather}/>
+                                        onClick={getRequiredCityWeather}/>
                         </IconButton>
                         <LocationSearchingIcon/>
 
                     </View>
                     : <View style={styles.iconsBox}>
-                        <Text style={styles.textStyle}>{cityTitle || state.searchingCity}</Text>
-                        <SearchIcon onClick={() => {
-                            setState({...state, onSearch: true})
-                        }}/>
-                        <LocationSearchingIcon/>
 
+                        <Text style={styles.textStyle}>{cityTitle || state.searchingCity}</Text>
+                        <SearchIcon onClick={onCityField}/>
+                        <LocationSearchingIcon/>
                     </View>
                 }
 
             </header>
+
         </View>
     )
 };
@@ -77,11 +89,13 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '55px',
         backgroundColor: '#3d4a5d',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
         zIndex: 100,
         color: 'white',
-        alignItems: 'flex-end',
+        alignItems: 'center',
+        /*position: 'absolute',*/
 
-        position: 'absolute'
     },
     iconsBox: {
         height: '55px',
@@ -101,5 +115,6 @@ const styles = StyleSheet.create({
     textStyle: {
         color: 'white',
         width: '150px',
-        fontSize: '17px'}
+        fontSize: '17px'
+    }
 });
