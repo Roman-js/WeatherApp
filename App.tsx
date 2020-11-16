@@ -8,7 +8,6 @@ import {BrowserRouter} from "react-router-dom";
 import {ForecastPresentationContainer} from "./01_Component/ForecastPresentationContainer";
 import {NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
-import arrow from  './05_Common/images/HeaderArrow.png'
 import {WeatherTomorrow} from "./01_Component/WhetherTomorrow";
 
 const Stack = createStackNavigator();
@@ -26,8 +25,6 @@ export default function App() {
                                 screenOptions={{
                                     headerStyle: {
                                         backgroundColor: '#3d4a5d',
-
-
                                     }
                                 }}
                             >
@@ -63,13 +60,6 @@ export default function App() {
                                             borderBottomColor: '#3d4a5d',
                                         },
 
-
-
-                                        //headerBackImage:  (props: { tintColor: string; }) => props.tintColor = '#F0F8FF'
-
-                                        /*header: ({ goBack }) => ({
-                                            left: ( <Icon name={'chevron-left'} onPress={ () => { goBack() } }  /> ),
-                                        })*/
                                     }}
 
                                 />
@@ -77,8 +67,7 @@ export default function App() {
                             </Stack.Navigator>
 
                         </NavigationContainer>
-                        {/*<WeatherForecast/>*/}
-                    {/*</View>*/}
+
                 </Provider>
             </React.StrictMode>
         </BrowserRouter>
@@ -86,10 +75,11 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 3,
-        /*backgroundColor: 'darkgrey',*/
-        alignItems: 'center',
-        justifyContent: 'space-between',
+    text: {
+        textAlign: 'center',
+        marginVertical: 25,
+        fontSize: 20,
+        fontWeight: '600',
+        fontFamily: 'Poppins'
     }
 });

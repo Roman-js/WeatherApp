@@ -12,7 +12,6 @@ import {
 } from "../04_Types/types";
 import {ThunkAction} from "redux-thunk";
 import AsyncStorage from '@react-native-community/async-storage';
-import {AppStateType} from "./store";
 import {convert} from "../01_Component/Tools/ConvertTimeStampToDate";
 
 
@@ -73,7 +72,6 @@ const MainReducer = (state: initialStateType = initialState, action: WeatherActi
                 ...state, responseResult: action.res
             };
         case GET_WEATHER_FORECAST: {
-
             return {
                 ...state, forecastItem: action.weatherList
             }
@@ -144,8 +142,7 @@ export const getDefaultWeather = (city: string): ThunkType =>
 
         try {
             let data = await API.getDefaultWeatherList(loc);
-
-            let date = convert(data.data.dt);
+                let date = convert(data.data.dt);
             let dateString = ' '+date[0]+' '+date[1]+' '+date[2]+' '+date[3];
 
             let res: mainType = {
@@ -174,11 +171,12 @@ export const getChoseCityWeather = (city: string): ThunkType =>
     async (dispatch, getState) => {
         try {
             let data = await API.getDefaultWeatherList(city);
+            console.log(data)
             let storage = {city: city, coordinates: data.coord};
             await AsyncStorage.setItem('defaultValue', JSON.stringify(storage));
             //console.log(JSON.parse.AsyncStorage.getItem('defaultValue'));
-
-            //let date = convert(data.data.dt);
+            let date = convert(data.data.dt);
+            let dateString = ' '+date[0]+' '+date[1]+' '+date[2]+' '+date[3];
 
             let res: mainType = {
                 temp: data.data.main.temp,
@@ -194,7 +192,7 @@ export const getChoseCityWeather = (city: string): ThunkType =>
                 temp_min: data.data.main.temp_min,
                 weatherIcon: data.data.weather[0].icon
             };
-            dispatch(getChoseCityWeatherSuccess(res, data.data.coord, data.data.name, data.headers.date));
+            dispatch(getChoseCityWeatherSuccess(res, data.data.coord, data.data.name, dateString));
             dispatch(responseResult(false));
 
             let promise = await API.getForecastWeatherList(data.data.coord, 'hourly');
@@ -210,6 +208,7 @@ export const getWeatherForecast = (coordinates: coordType): ThunkType =>
 
         try {
             let data = await API.getForecastWeatherList(coordinates, 'hourly');
+
 
             let date = convert(data.data.daily[1].dt);
             let dateString = ' '+date[0]+' '+date[1]+' '+date[2]+' '+date[3];
@@ -234,3 +233,17 @@ export const getWeatherForecastForCoupleDays = (coordinates: coordType, days: nu
         }
     };
 
+export const getGeoLocation = (): ThunkType =>
+    async (dispatch, getState) => {
+
+    try {
+        let getLocation = await API.getGeoLocation();
+
+        dispatch(getWeatherForecast({lat: getLocation.latitude, lon: getLocation.longitude}));
+        dispatch(getChoseCityWeather(getLocation.city))
+
+
+    } catch (e) {
+        console.log('error')
+    }
+    };

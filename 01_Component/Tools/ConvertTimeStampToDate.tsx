@@ -3,8 +3,6 @@ import {View} from "react-native";
 
 export const convert = (timestamp: number) =>{
 
-
-
     let date = new Date(timestamp * 1000);
 
     let hours = date.getHours();
@@ -15,6 +13,7 @@ export const convert = (timestamp: number) =>{
     let month = 1+ date.getMonth();
     let year = date.getFullYear();
     let dayNumber = date.getDate();
+
 
     const daysOfWeek = () =>{
     switch (day) {
@@ -44,8 +43,6 @@ export const convert = (timestamp: number) =>{
 
     return  [daysOfWeek(), dayNumber, months(), year]
 
-    //let formattedTime = date+' '/*+ hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);*/
-    // formattedTime.substr(0, 15)
 };
 
 

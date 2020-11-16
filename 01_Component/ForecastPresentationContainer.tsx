@@ -1,15 +1,8 @@
-import React, {useState} from "react";
+import React from "react";
 import {ForecastPresentation} from "./ForecastPresentation";
 import {useSelector} from "react-redux";
 import {AppStateType} from "../03_reducer/store";
 import {initialStateType} from "../03_reducer/MainReducer";
-import {StyleSheet, Text, View} from "react-native";
-import {
-    dataArrayOfDailyForecastsType, dataDailyForecastType,
-    feelsLikeForecastType,
-    tempForecastType,
-    weatherForecastType
-} from "../04_Types/types";
 
 
 export const ForecastPresentationContainer = () => {
@@ -21,17 +14,9 @@ export const ForecastPresentationContainer = () => {
 
     return (
 
-        /*<View style={styles.forecastBox}>*/
-
             <ForecastPresentation forecastDays={daysArray} date={data.date}/>
-
-        /*</View>*/
 
     )
 };
 
-const styles = StyleSheet.create({
-   forecastBox: {
-       marginTop: '55px'
-   }
-});
+

@@ -1,13 +1,10 @@
 import {ImageBackground, StyleSheet, Text, View} from "react-native";
-import React, {useState} from "react";
+import React from "react";
 // @ts-ignore
 import windIcon from '../05_Common/images/windIcon.jpg'
 // @ts-ignore
 import windIcon_small from '../05_Common/images/windIcon_small.jpg'
 import {dataDailyForecastType} from "../04_Types/types";
-import { useRoute } from '@react-navigation/native';
-import {WeatherForecast} from "./WeatherForecast";
-import {Header} from "./Header";
 import backgroundImg from "../05_Common/images/backForecasts_2.png";
 import {convert} from "./Tools/ConvertTimeStampToDate";
 
@@ -18,8 +15,6 @@ type propsType = {
 
 export const ForecastPresentation = (props: propsType) => {
 
-
-
     return (
 
         <View style={styles.container}>
@@ -29,13 +24,11 @@ export const ForecastPresentation = (props: propsType) => {
 
                 {props.forecastDays.map(day =>
                     <View style={styles.weatherItem} key={day.dt}>
-                        {console.log(props)}
-                        <View style={styles.dateBox}>
 
+                        <View style={styles.dateBox}>
                             <Text style={{fontSize: '30px', fontWeight: 600}}>{convert(day.dt)[1]}</Text>
                             <Text style={{fontSize: '15px', fontWeight: 500}}>{convert(day.dt)[0]}</Text>
                             <Text style={{fontWeight: 500, textAlign: 'center'}}>{convert(day.dt)[2]+' '+convert(day.dt)[3]}</Text>
-
                         </View>
 
                         <View style={styles.windBox}>
@@ -61,7 +54,6 @@ export const ForecastPresentation = (props: propsType) => {
                                 style={{ textAlign: 'center'}}>{day.weather[0].description}</Text>
                         </View>
                     </View>)}
-                    {/*<WeatherForecast/>*/}
                 <ImageBackground source={backgroundImg} style={styles.backgroundImage}>
                     <View style={styles.bottomBox}>
 
@@ -71,11 +63,10 @@ export const ForecastPresentation = (props: propsType) => {
 
             : <View style={styles.mainBox}>
                 {props.forecastDays.map(day =>
-                <View style={styles.weatherItemSevenDays}>
+                <View style={styles.weatherItemSevenDays} key={day.dt}>
 
                     <View style={styles.dateBox}>
                         <Text style={{ fontWeight: 600}}>{convert(day.dt)[1]}</Text>
-                        {/*<Text style={{ fontWeight: 500}}>{convert(day.dt)[0]}</Text>*/}
                         <Text style={{fontWeight: 500}}>{convert(day.dt)[2]}</Text>
                     </View>
 
@@ -105,15 +96,12 @@ export const ForecastPresentation = (props: propsType) => {
 const styles = StyleSheet.create({
     container: {
         flex: 3,
-        /*backgroundColor: 'darkgrey',*/
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: '#d4f4f1'
     },
     mainBox: {
         height: '100%',
-
-        /*justifyContent: 'space-around',*/
         width: '100%',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -124,7 +112,6 @@ const styles = StyleSheet.create({
     weatherItem: {
         width: '90%',
         minHeight: '22vh',
-        /*backgroundColor: '#2ee885',*/
         flexDirection: 'row',
         shadowRadius: 10,
         marginTop: '10px',
@@ -138,7 +125,6 @@ const styles = StyleSheet.create({
     weatherItemSevenDays: {
         width: '90%',
         height: '8vh',
-        /*backgroundColor: '#2ee885',*/
         flexDirection: 'row',
         shadowRadius: 10,
         marginTop: '5px',
@@ -168,7 +154,6 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     iconBox: {
-        /*paddingTop: '10px',*/
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -182,10 +167,8 @@ const styles = StyleSheet.create({
     bottomBox: {
         width: '100%',
         height: '15vh',
-        /*backgroundColor: 'green',*/
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: '10px',
-
     },
 });

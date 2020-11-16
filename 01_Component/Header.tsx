@@ -3,11 +3,9 @@ import LocationSearchingIcon from "@material-ui/icons/LocationSearching";
 import React, {useState} from "react";
 import {StyleSheet, Text, View} from "react-native";
 import {IconButton, TextField} from "@material-ui/core";
-import {getChoseCityWeather, getDefaultWeather, responseResult} from "../03_reducer/MainReducer";
+import {getChoseCityWeather, getGeoLocation, responseResult} from "../03_reducer/MainReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../03_reducer/store";
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
 
 
 export const Header = () => {
@@ -39,17 +37,17 @@ export const Header = () => {
     const onCityField = () => {
         setTimeout(()=> !responseResultData && setState({...state, onSearch: false}), 35000);
         setState({...state, onSearch: true})
-
     };
+    const getLocation = () =>{
+        dispatch(getGeoLocation())
+        setState({...state, onSearch: false})
+    };
+
+
 
 
     return (
         <View style={styles.headerBox}>
-            {/*<View style={{marginLeft: '10px'}}>
-                <IconButton style={{color: 'white'}}>
-                    <ArrowBackIcon/>
-                </IconButton>
-            </View>*/}
 
             <header>
                 {state.onSearch
@@ -67,14 +65,18 @@ export const Header = () => {
                             <SearchIcon style={{color: 'white'}}
                                         onClick={getRequiredCityWeather}/>
                         </IconButton>
-                        <LocationSearchingIcon/>
-
+                        <IconButton>
+                        <LocationSearchingIcon onClick={getLocation} style={{color: 'white'}}/>
+                        </IconButton>
+                        {/*<FindGeoLocation/>*/}
                     </View>
                     : <View style={styles.iconsBox}>
 
                         <Text style={styles.textStyle}>{cityTitle || state.searchingCity}</Text>
                         <SearchIcon onClick={onCityField}/>
-                        <LocationSearchingIcon/>
+                        <IconButton>
+                        <LocationSearchingIcon onClick={getLocation} style={{color: 'white'}}/>
+                        </IconButton>
                     </View>
                 }
 
